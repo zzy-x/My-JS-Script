@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         加载本地字幕
-// @version      0.1.0
+// @version      0.1.1
 // @description  加载本地srt字幕到在线视频
 // @author       ChatGPT
 // @match        *://*/*

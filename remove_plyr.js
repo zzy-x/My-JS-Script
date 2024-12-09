@@ -5,6 +5,7 @@
 // @description  移除 Plyr 播放器并用原生视频替代，避免字幕被挡住
 // @author       ChatGPT
 // @match        https://*/*
+// @icon         https://missav.com/favicon.ico
 // @grant        none
 // @updateURL    https://raw.githubusercontent.com/zzy-x/My-JS-Script/main/remove_plyr.js
 // @downloadURL  https://raw.githubusercontent.com/zzy-x/My-JS-Script/main/remove_plyr.js
