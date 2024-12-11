@@ -1,14 +1,17 @@
 // ==UserScript==
 // @name         加载本地字幕
-// @version      0.1.1
+// @version      0.2
 // @description  加载本地srt字幕到在线视频
 // @author       ChatGPT
-// @match        *://*/*
+// @match        https://missav.com/cn/*
+// @match        https://javplayer.me/e/*
+// @icon         https://missav.com/favicon.ico
 // @grant        GM_addStyle
 // @run-at       document-end
 // @updateURL    https://raw.githubusercontent.com/zzy-x/My-JS-Script/main/add_subtitle.js
 // @downloadURL  https://raw.githubusercontent.com/zzy-x/My-JS-Script/main/add_subtitle.js
 // ==/UserScript==
+// 123av.com = https://javplayer.me
 
 (function () {
     'use strict';
@@ -18,10 +21,10 @@
 
         // 查找没有 'gifVideo' 和 'hidden' 类名且 display 内联样式不为 none 的第一个视频元素
         const videos = Array.from(document.querySelectorAll('video'));
-        const video = videos.find(v => 
-            !v.classList.contains('gifVideo') && 
-            !v.classList.contains('hidden') && 
-            v.style.display !== 'none'
+        const video = videos.find(v =>
+            // !v.classList.contains('gifVideo') && 
+            !v.classList.contains('hidden') &&    //missav.com
+            v.style.display !== 'none'   //123av.com
         );
         if (!video) return;
 
@@ -41,10 +44,14 @@
         // 按钮点击事件，触发文件选择框
         button.addEventListener('click', () => input.click());
 
-        // 5秒后隐藏按钮
-        // const hideButtonTimeout = setTimeout(() => {
-            // button.style.display = 'none'; // 隐藏按钮
-        // }, 5000);
+        // 全屏隐藏按钮
+        document.addEventListener('fullscreenchange', () => {
+            if (document.fullscreenElement) {
+                button.style.display = 'none'; // 全屏时隐藏字幕按钮
+            } else {
+                button.style.display = ''; // 退出全屏时恢复按钮显示
+            }
+        });
 
         // 处理文件选择事件
         input.addEventListener('change', function (event) {
@@ -56,9 +63,6 @@
             reader.onload = function (e) {
                 const subtitles = parseSubtitles(e.target.result); // 解析字幕内容
                 addSubtitlesToVideo(subtitles); // 将字幕添加到视频
-
-                // 加载字幕成功后，隐藏按钮
-                // button.style.display = 'none';
             };
             reader.readAsText(file); // 读取文件内容为文本
         });
@@ -119,8 +123,8 @@
             right: 10px;
             padding: 0px;
             width: 65px;          /* 固定按钮宽度 */
-            height: 20px;         /* 固定按钮高度 */
-            font-size: 12px;      /* 文字大小 */
+            height: 24px;         /* 固定按钮高度 */
+            font-size: 14px;      /* 文字大小 */
             background: linear-gradient(135deg, #6e7dff, #4d58f7);  /* 使用渐变背景色 */
             color: #fff;
             border: none;
@@ -128,7 +132,6 @@
             cursor: pointer;
             z-index: 10000;
             text-align: center;   /* 确保文字居中 */
-            line-height: 12px;    /* 调整行高，使文字垂直居中 */
         }
 
         /* 按钮悬浮效果 */

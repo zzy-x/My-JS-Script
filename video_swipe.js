@@ -1,10 +1,14 @@
 // ==UserScript==
-// @name         视频左右滑动调整进度
+// @name         滑动视频调整进度
 // @namespace    http://tampermonkey.net/
-// @version      0.1
-// @description  移动端视频左右滑动调整进度
+// @version      0.2
+// @description  移动端视频左右滑动调整进度。B站，抖音，YouTube，
 // @author       ChatGPT, zzy
-// @match        *://*/*
+// @match        https://www.bilibili.com/video/*
+// @match        https://www.bilibili.com/bangumi/play/*
+// @match        https://www.douyin.com/?recommend=1
+// @match        https://www.douyin.com/?is_from_mobile_home=1&recommend=1
+// @match        https://*.youtube.com/watch*
 // @grant        none
 // @updateURL    https://raw.githubusercontent.com/zzy-x/My-JS-Script/main/video_swipe.js
 // @downloadURL  https://raw.githubusercontent.com/zzy-x/My-JS-Script/main/video_swipe.js
@@ -150,7 +154,9 @@
 
     // 等待页面资源加载完成后执行操作
     window.onload = function () {
-        observeVideos(); // 启动 MutationObserver 和初始扫描
+        setTimeout(() => {
+            observeVideos(); // 启动 MutationObserver 和初始扫描
+        }, 3000);
     };
 })();
 

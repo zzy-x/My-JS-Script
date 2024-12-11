@@ -1,10 +1,11 @@
 // ==UserScript==
 // @name         抖音优化
 // @namespace    http://tampermonkey.net/
-// @version      0.1
-// @description  抖音评论中间展开，双击打开评论且取消点赞
+// @version      0.2
+// @description  抖音评论中间展开，点击右侧打开评论，去除无关元素
 // @author       zzy
-// @match        https://www.douyin.com/*
+// @match        https://www.douyin.com/?recommend=1
+// @match        https://www.douyin.com/?is_from_mobile_home=1&recommend=1
 // @icon         https://www.douyin.com/favicon.ico
 // @grant        GM_addStyle
 // @updateURL    https://raw.githubusercontent.com/zzy-x/My-JS-Script/main/douyin.js
@@ -45,52 +46,34 @@
         transition: height .15s linear !important;
         position: absolute;
     }
+    /* 评论区隐形按钮 */
+    .my-comment-button {
+            position: fixed;
+            right: 20px;
+            bottom: 70px;
+            width: 70px;
+            height: 500px;
+            opacity: 0;     /* 设置为完全透明 */
+        }
     `);
 
-    // 双击
-    document.addEventListener('dblclick', function (e) {
-        let v = document.querySelector("#sliderVideo[data-e2e='feed-active-video']");
-        v.querySelector(".jp8u3iov").click(); //打开评论
+    // 创建一个窄高的透明开关评论区按钮
+    const button = document.createElement('button');
+    button.classList.add('my-comment-button'); // 添加类名
 
-        setTimeout(() => {
-            let a = document.querySelector('#videoSideCard'); //评论区
-            var svg = a.querySelector('svg'); //关闭评论区按钮
-            svg.firstChild.setAttribute("fill", "white");
-            let b = a.querySelector('span.kXqO4xu2');
-            b.parentNode.appendChild(svg);
-        }, 100);
+    // 使用 setTimeout 延迟插入按钮
+    setTimeout(() => {
+        const fullscreenContainer = document.querySelector('#slidelist');
+        fullscreenContainer?.appendChild(button);
+    }, 3000);
 
-        setTimeout(() => {
-            v.querySelector(".UIQajZAR").click(); //取消点赞
-        }, 1000);
+    // 监听按钮点击事件
+    button.addEventListener('click', function () {
+        // 查找当前活跃的视频元素
+        const v = document.querySelector("#sliderVideo[data-e2e='feed-active-video']");
+
+        // 查找评论按钮并点击
+        v?.querySelector(".jp8u3iov")?.click();
     });
 
-    // 全屏，取消静音
-    let t = setInterval(() => {
-        let c = document.querySelector("#sliderVideo xg-icon.xgplayer-volume");
-        if (c == null) return;
-        clearInterval(t);
-
-        setTimeout(() => {
-            if (c.dataset.state == 'mute') {
-                c.firstElementChild.click();
-            }
-            document.querySelector("#sliderVideo xg-icon.xgplayer-fullscreen").click();
-        }, 50);
-    }, 200);
-
 })();
-
-
-
-
-
-
-
-
-
-
-
-
-
-

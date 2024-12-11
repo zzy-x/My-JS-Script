@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Google_search
 // @namespace    http://tampermonkey.net/
-// @version      0.1
+// @version      0.2
 // @description  在谷歌搜索页面的右侧面板放置按钮，支持快捷操作
 // @author       ChatGPT
 // @match        https://www.google.com/search*
@@ -34,6 +34,8 @@
         // 快捷操作配置
         const actions = [
             { label: '中文', action: () => changeSearchQuery('中文') },
+            { label: 'jav', action: () => changeSearchQuery('jav') },
+            { label: '字幕', action: () => changeSearchQuery('字幕') },
             { label: 'subtitle', action: () => changeSearchQuery('subtitle') },
         ];
 
