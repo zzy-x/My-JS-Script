@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         抖音优化
 // @namespace    http://tampermonkey.net/
-// @version      0.2
-// @description  抖音评论中间展开，点击右侧打开评论，去除无关元素
+// @version      0.2.1
+// @description  抖音评论中间展开，点击右侧打开评论，去除无关元素，全屏横屏时隐藏左下角信息
 // @author       zzy
 // @match        https://www.douyin.com/?recommend=1
 // @match        https://www.douyin.com/?is_from_mobile_home=1&recommend=1
@@ -48,31 +48,52 @@
     }
     /* 评论区隐形按钮 */
     .my-comment-button {
-            position: fixed;
-            right: 20px;
-            bottom: 70px;
-            width: 70px;
-            height: 500px;
-            opacity: 0;     /* 设置为完全透明 */
-        }
+        position: fixed;
+        right: 20px;
+        bottom: 70px;
+        width: 70px;
+        height: 500px;
+        opacity: 0;     /* 设置为完全透明 */
+    }
+    /* 添加元素类名，切换显示与隐藏 */
+    .hide-on-landscape {
+        display: none !important; /* 强制隐藏样式 */
+    }
+    .show-on-portrait {
+        display: block !important; /* 强制显示样式 */
+    }
     `);
 
-    // 创建一个窄高的透明开关评论区按钮
+    // 全屏时，横屏隐藏左下角信息
+    function updateVisibility() {
+        if (!document.fullscreenElement) return; // 如果非全屏模式，直接退出
+        
+        const targetElements = document.querySelectorAll('.U0RTp0k8');
+
+        targetElements.forEach(targetElement => {
+            // 检测到的是旋转之前的状态
+            if (window.matchMedia("(orientation: landscape)").matches) {
+                targetElement.classList.add('show-on-portrait');
+                targetElement.classList.remove('hide-on-landscape');
+            } else {
+                targetElement.classList.add('hide-on-landscape');
+                targetElement.classList.remove('show-on-portrait');
+            }
+        });
+    }
+    window.addEventListener('orientationchange', updateVisibility);
+
+
+    // 创建一个透明按钮开关评论区
     const button = document.createElement('button');
     button.classList.add('my-comment-button'); // 添加类名
 
-    // 使用 setTimeout 延迟插入按钮
     setTimeout(() => {
-        const fullscreenContainer = document.querySelector('#slidelist');
-        fullscreenContainer?.appendChild(button);
+        document.querySelector('#slidelist')?.appendChild(button);
     }, 3000);
 
-    // 监听按钮点击事件
     button.addEventListener('click', function () {
-        // 查找当前活跃的视频元素
         const v = document.querySelector("#sliderVideo[data-e2e='feed-active-video']");
-
-        // 查找评论按钮并点击
         v?.querySelector(".jp8u3iov")?.click();
     });
 
