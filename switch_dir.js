@@ -1,12 +1,15 @@
 // ==UserScript==
 // @name         双击视频切换横竖屏
 // @namespace    http://tampermonkey.net/
-// @version      0.2.1
-// @description  全屏状态下双击视频切换横竖屏。支持：抖音，YouTube。
+// @version      0.2.2
+// @description  全屏状态下双击视频切换横竖屏。支持：抖音，YouTube，B站，斗鱼。
 // @author       ChatGPT
 // @match        https://www.douyin.com/?recommend=1
 // @match        https://www.douyin.com/?is_from_mobile_home=1&recommend=1
 // @match        https://*.youtube.com/watch*
+// @match        https://www.bilibili.com/video/*
+// @match        https://www.bilibili.com/bangumi/play/*
+// @match        https://www.douyu.com/*
 // @grant        none
 // @updateURL    https://raw.githubusercontent.com/zzy-x/My-JS-Script/main/switch_dir.js
 // @downloadURL  https://raw.githubusercontent.com/zzy-x/My-JS-Script/main/switch_dir.js

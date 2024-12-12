@@ -49,10 +49,10 @@
     /* 评论区隐形按钮 */
     .my-comment-button {
         position: fixed;
-        right: 20px;
-        bottom: 70px;
-        width: 70px;
-        height: 500px;
+        right: 10px;
+        bottom: 50px;
+        width: 50px;
+        height: 100px;
         opacity: 0;     /* 设置为完全透明 */
     }
     /* 添加元素类名，切换显示与隐藏 */
