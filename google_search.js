@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Google_search
 // @namespace    http://tampermonkey.net/
-// @version      0.2
-// @description  在谷歌搜索页面的右侧面板放置按钮，支持快捷操作
+// @version      0.2.0
+// @description  在谷歌搜索结果页面的上方面板放置按钮，支持快捷操作
 // @author       ChatGPT
 // @match        https://www.google.com/search*
 // @icon         https://www.google.com/favicon.ico
@@ -16,16 +16,8 @@
 
     window.onload = function () {
         const query = new URLSearchParams(window.location.search).get('q');
-        const searchResults = document.getElementById('rcnt');
-        if (!searchResults) return;  // 如果没有 #rcnt，就退出
-
-        // 查找或创建右侧面板
-        let rhsPanel = document.getElementById('rhs');
-        if (!rhsPanel) {
-            rhsPanel = document.createElement('div');
-            rhsPanel.id = 'rhs';
-            searchResults.appendChild(rhsPanel);
-        }
+        let centerPanel = document.getElementById('center_col');
+        if (!centerPanel) return;
 
         // 创建一个新的 div 来容纳按钮
         const buttonContainer = document.createElement('div');
@@ -49,8 +41,8 @@
             buttonContainer.appendChild(button); // 将按钮加入到按钮容器中
         });
 
-        // 将按钮容器添加到右侧面板
-        rhsPanel.insertBefore(buttonContainer, rhsPanel.firstChild);
+        // 将按钮容器添加到面板
+        centerPanel.insertBefore(buttonContainer, centerPanel.firstChild);
 
         // 搜索内容转换并跳转
         function changeSearchQuery(suffix) {

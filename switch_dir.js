@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         双击视频切换横竖屏
 // @namespace    http://tampermonkey.net/
-// @version      0.2
+// @version      0.2.1
 // @description  全屏状态下双击视频切换横竖屏。支持：抖音，YouTube。
 // @author       ChatGPT
 // @match        https://www.douyin.com/?recommend=1
@@ -14,11 +14,6 @@
 
 (function () {
     'use strict';
-
-    // 检查是否是全屏状态
-    const isFullScreen = () => {
-        return document.fullscreenElement || document.webkitFullscreenElement;
-    };
 
     // 切换屏幕方向
     const toggleOrientation = () => {
@@ -38,27 +33,20 @@
 
     let lastTouchTime = 0;
     const doubleTapThreshold = 300; // 双击最大时间间隔
-    let singleTapTimeout = null; // 单击延时处理的 Timeout
 
     document.addEventListener('touchend', function (event) {
         const currentTime = new Date().getTime();
         const timeDifference = currentTime - lastTouchTime;
 
-        // 阻止默认行为
-        event.preventDefault();
-        event.stopPropagation();
-
-        if (timeDifference <= doubleTapThreshold) {
-            // 双击事件处理
-            clearTimeout(singleTapTimeout); // 清除单击的延时处理
-            if (isFullScreen()) {
-                toggleOrientation(); // 双击切换屏幕方向
-            }
-        } else {
-            // 单击事件处理
-            singleTapTimeout = setTimeout(() => {
-                triggerClickEvent(event.target); // 生成并触发自定义点击事件
+        if (timeDifference <= doubleTapThreshold && document.fullscreenElement) {
+            // 延时第二次点击，相当于两次单击，防止触发默认双击事件
+            event.preventDefault();
+            event.stopPropagation();
+            setTimeout(() => {
+                triggerClickEvent(event.target);
             }, doubleTapThreshold);
+
+            toggleOrientation();
         }
 
         lastTouchTime = currentTime; // 更新最后触摸时间
