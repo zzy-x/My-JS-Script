@@ -5,6 +5,7 @@
 // @author       ChatGPT
 // @description  记住Instagram浏览位置，返回时回到位置
 // @match        https://www.instagram.com/*
+// @exclude      https://www.instagram.com/*/*/*
 // @icon         https://www.instagram.com/favicon.ico
 // @grant        none
 // @run-at       document-end
@@ -18,8 +19,7 @@
 
     // 根据当前页面路径获取唯一的滚动位置键
     function getScrollPositionKey() {
-        const pathParts = window.location.pathname.split('/').filter(Boolean);
-        return pathParts.length <= 2 ? `insta_scroll_position_${window.location.pathname}` : null;
+        return `insta_scroll_position_${window.location.pathname}`;
     }
 
     // 恢复滚动位置

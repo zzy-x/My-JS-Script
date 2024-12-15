@@ -1,14 +1,14 @@
 // ==UserScript==
 // @name         滑动视频调整进度
 // @namespace    http://tampermonkey.net/
-// @version      0.2
+// @version      0.2.1
 // @description  移动端视频左右滑动调整进度。B站，抖音，YouTube，
 // @author       ChatGPT, zzy
 // @match        https://www.bilibili.com/video/*
 // @match        https://www.bilibili.com/bangumi/play/*
 // @match        https://www.douyin.com/?recommend=1
 // @match        https://www.douyin.com/?is_from_mobile_home=1&recommend=1
-// @match        https://*.youtube.com/watch*
+// @match        https://www.youtube.com/*
 // @grant        none
 // @updateURL    https://raw.githubusercontent.com/zzy-x/My-JS-Script/main/video_swipe.js
 // @downloadURL  https://raw.githubusercontent.com/zzy-x/My-JS-Script/main/video_swipe.js
@@ -104,7 +104,7 @@
 
             // 水平滑动
             if (Math.abs(deltaX) > swipeThreshold && Math.abs(deltaX) > Math.abs(deltaY)) {
-                timeChange = Math.floor(deltaX / 10); // 每10px滑动调整1秒
+                timeChange = Math.floor(Math.pow(deltaX / 10, 1.3)); // 使得滑动更快
                 if (timeChange !== tmpTimeChange) { //timeChange改变
                     showTooltip(tooltip, formattedStartTime, timeChange);
                     tmpTimeChange = timeChange;

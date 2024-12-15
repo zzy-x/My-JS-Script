@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         抖音优化
 // @namespace    http://tampermonkey.net/
-// @version      0.2.1
-// @description  抖音评论中间展开，点击右侧打开评论，去除无关元素，全屏横屏时隐藏左下角信息
+// @version      0.2.2
+// @description  自动全屏(需先用户有操作)，取消静音，抖音评论中间展开，点击右侧打开评论，去除无关元素，全屏横屏时隐藏左下角信息
 // @author       zzy
 // @match        https://www.douyin.com/?recommend=1
 // @match        https://www.douyin.com/?is_from_mobile_home=1&recommend=1
@@ -55,30 +55,23 @@
         height: 100px;
         opacity: 0;     /* 设置为完全透明 */
     }
-    /* 添加元素类名，切换显示与隐藏 */
-    .hide-on-landscape {
-        display: none !important; /* 强制隐藏样式 */
-    }
-    .show-on-portrait {
-        display: block !important; /* 强制显示样式 */
-    }
     `);
+
+    window.addEventListener('load', () => {
+        player.muted = false;
+        player.getFullscreen();
+    });
+
+    const slideList = document.querySelector('#slidelist');
 
     // 全屏时，横屏隐藏左下角信息
     function updateVisibility() {
         if (!document.fullscreenElement) return; // 如果非全屏模式，直接退出
-        
-        const targetElements = document.querySelectorAll('.U0RTp0k8');
 
+        const targetElements = slideList.querySelectorAll('.U0RTp0k8');
         targetElements.forEach(targetElement => {
             // 检测到的是旋转之前的状态
-            if (window.matchMedia("(orientation: landscape)").matches) {
-                targetElement.classList.add('show-on-portrait');
-                targetElement.classList.remove('hide-on-landscape');
-            } else {
-                targetElement.classList.add('hide-on-landscape');
-                targetElement.classList.remove('show-on-portrait');
-            }
+            targetElement.style.display = window.matchMedia("(orientation: landscape)").matches ? 'block' : 'none';
         });
     }
     window.addEventListener('orientationchange', updateVisibility);
@@ -89,11 +82,11 @@
     button.classList.add('my-comment-button'); // 添加类名
 
     setTimeout(() => {
-        document.querySelector('#slidelist')?.appendChild(button);
+        slideList.appendChild(button);
     }, 3000);
 
     button.addEventListener('click', function () {
-        const v = document.querySelector("#sliderVideo[data-e2e='feed-active-video']");
+        const v = slideList.querySelector("#sliderVideo[data-e2e='feed-active-video']");
         v?.querySelector(".jp8u3iov")?.click();
     });
 
