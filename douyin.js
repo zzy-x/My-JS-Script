@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         抖音优化
 // @namespace    http://tampermonkey.net/
-// @version      0.2.2
+// @version      0.2.3
 // @description  自动全屏(需先用户有操作)，取消静音，抖音评论中间展开，点击右侧打开评论，去除无关元素，全屏横屏时隐藏左下角信息
 // @author       zzy
 // @match        https://www.douyin.com/?recommend=1
@@ -57,12 +57,16 @@
     }
     `);
 
+    let slideList;
     window.addEventListener('load', () => {
-        player.muted = false;
-        player.getFullscreen();
+        setTimeout(() => {
+            slideList = document.querySelector('#slidelist');
+            slideList.appendChild(button);
+            player.muted = false;
+            player.getFullscreen();
+        }, 500);
     });
 
-    const slideList = document.querySelector('#slidelist');
 
     // 全屏时，横屏隐藏左下角信息
     function updateVisibility() {
@@ -80,10 +84,6 @@
     // 创建一个透明按钮开关评论区
     const button = document.createElement('button');
     button.classList.add('my-comment-button'); // 添加类名
-
-    setTimeout(() => {
-        slideList.appendChild(button);
-    }, 3000);
 
     button.addEventListener('click', function () {
         const v = slideList.querySelector("#sliderVideo[data-e2e='feed-active-video']");

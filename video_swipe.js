@@ -104,7 +104,7 @@
 
             // 水平滑动
             if (Math.abs(deltaX) > swipeThreshold && Math.abs(deltaX) > Math.abs(deltaY)) {
-                timeChange = Math.floor(Math.pow(deltaX / 10, 1.3)); // 使得滑动更快
+                timeChange = Math.sign(deltaX) * Math.floor(Math.pow(Math.abs(deltaX) / 10, 1.3));
                 if (timeChange !== tmpTimeChange) { //timeChange改变
                     showTooltip(tooltip, formattedStartTime, timeChange);
                     tmpTimeChange = timeChange;
