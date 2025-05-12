@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         抖音优化
 // @namespace    http://tampermonkey.net/
-// @version      0.2.3
+// @version      0.3.0
 // @description  自动全屏(需先用户有操作)，取消静音，抖音评论中间展开，点击右侧打开评论，去除无关元素，全屏横屏时隐藏左下角信息
 // @author       zzy
 // @match        https://www.douyin.com/?recommend=1
@@ -15,13 +15,16 @@
 (function () {
     'use strict';
 
+    const video_info = '.AXQAavwp'; //左下角视频信息
+    const foo = 'Kk4V1N2A'; //点开评论增加的class属性
+
     GM_addStyle(`
     /* 隐藏全屏退出，右侧展开，右侧点赞评论等，全屏上下切换，评论区上方大家都在搜，触摸屏优化脚本，播放时进度条，评论下方回复点赞，评论区顶部等等按钮 */
-    .PysK8uyn, .zNBuJls_, div.I6U7FiE8, .xgplayer-playswitch.NGNo484y.filter-bg, .comment-header-with-search, .TouchGesture_Btn.TouchGestureForbidScroll, .xgplayer-playing:not(.xgplayer-pause) > xg-controls, .vXZJEXVc, .FDYan0Fo.lMX0vxiU.semi-always-dark.YbzuqE5j.BrYiovk2{
+    .TNfGqxTO, .zNBuJls_, div.jkfSVWLT, .xgplayer-playswitch.NGNo484y.filter-bg, .comment-header-with-search, .TouchGesture_Btn.TouchGestureForbidScroll, .xgplayer-playing:not(.xgplayer-pause) > xg-controls, .vXZJEXVc, .FDYan0Fo.lMX0vxiU.semi-always-dark.YbzuqE5j.BrYiovk2{
         display:none; !important;
     }
     /* 左下角视频信息靠底部显示 */
-    .U0RTp0k8{
+    ${video_info}{
         bottom:0px !important;
     }
     /* 视频铺满，使评论不从右侧展开 */
@@ -29,10 +32,10 @@
         width: 100% !important;
     }
     /* 点开评论时，使视频往上提，隐藏左下角视频信息 */
-    #sliderVideo[data-e2e] .playerContainer[class~='Yyf8NWk0']{
+    #sliderVideo[data-e2e] .playerContainer[class~="${foo}"]{
         height: 45% !important;
     }
-    #sliderVideo[data-e2e] .playerContainer[class~='Yyf8NWk0'] .U0RTp0k8{
+    #sliderVideo[data-e2e] .playerContainer[class~="${foo}"] ${video_info}{
         height: 0px !important;
     }
     /* 使评论区从中间铺满 */
@@ -62,9 +65,9 @@
         setTimeout(() => {
             slideList = document.querySelector('#slidelist');
             slideList.appendChild(button);
-            player.muted = false;
+            //player.muted = false;
             player.getFullscreen();
-        }, 500);
+        }, 1500);
     });
 
 
@@ -72,7 +75,7 @@
     function updateVisibility() {
         if (!document.fullscreenElement) return; // 如果非全屏模式，直接退出
 
-        const targetElements = slideList.querySelectorAll('.U0RTp0k8');
+        const targetElements = slideList.querySelectorAll(video_info);
         targetElements.forEach(targetElement => {
             // 检测到的是旋转之前的状态
             targetElement.style.display = window.matchMedia("(orientation: landscape)").matches ? 'block' : 'none';
@@ -87,7 +90,7 @@
 
     button.addEventListener('click', function () {
         const v = slideList.querySelector("#sliderVideo[data-e2e='feed-active-video']");
-        v?.querySelector(".jp8u3iov")?.click();
+        v?.querySelector(".kT7icnwc")?.click();
     });
 
 })();
